@@ -1,19 +1,29 @@
 gui = {
     hud = {
-        hotbar = {
+        { -- HOTBAR
             sprite = love.graphics.newImage('assets/textures/gui/hotbar.png'),
-            position = {x = love.graphics.getWidth()/2,y = love.graphics.getHeight()/2},
+            position = { x = function() return love.graphics.getWidth()/2 end ,y = function() return love.graphics.getHeight()/2 * 1.97 end},
             offset = {x = 354, y = 88},
-            scale = 0.7
-        }
+            scale = .7
+        },
     }
 }
 
 function gui:draw()
-    for _, elements in pairs(self.hud) do
-        for _, properties in pairs(elements) do
-            love.graphics.draw(properties.sprite,properties.position.x,properties.position.y,nil,properties.scale,properties.scale,properties.offset.x,properties.offset.y)
-        end
+    for _, elements in ipairs(self.hud) do
+        local posX = elements.position.x()
+        local posY = elements.position.y()
+
+        love.graphics.draw(
+            elements.sprite,
+            posX,
+            posY,
+            nil,
+            elements.scale,
+            elements.scale,
+            elements.offset.x,
+            elements.offset.y
+        )
     end
 end
 
