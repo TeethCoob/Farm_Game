@@ -1,6 +1,6 @@
 -- LIBRARIES
 local sti = require('lib.sti')
-local winfield = require('lib.windfield')
+local windfield = require('lib.windfield')
 local anim8 = require('lib.anim8')
 local camera = require('lib.camera')
 
@@ -18,7 +18,7 @@ function love.load()
     cam.scale = 3
 
     -- WORLD FOR PHYSICS
-    world = winfield.newWorld(0,0)
+    world = windfield.newWorld(0,0)
 
     -- MAKES COLLISION BOX/AREA
     if gardenScene.layers['Collision'] then
@@ -68,12 +68,7 @@ function love.keypressed(key)
     end
 
     if key == 'e' then
-        gui.inv.visible = not gui.inv.visible
-        if gui.inv.visible then
-            print('Inventory is now visible')
-        else
-            print('Inventory is now hidden')
-        end
+        gui:toggle(gui.menu[1])
     end
     
 end
