@@ -1,23 +1,21 @@
 gui = {
-    hud = {
-        hotbar = {
-            sprite = love.graphics.newImage('assets/textures/gui/hotbar.png'),
-            position = {x = 0,0}
-        }
-    },
-    popUp = {}
+    hud = {},
+    popUp = {},
 }
 
 function gui:draw()
-    for _, k in ipairs(self.hud) do
-        for z, v in ipairs(k) do
-            love.graphics.draw(v.sprite, v.position.x, v.position.y)
+    for _, k in pairs(self.hud) do
+        for z, v in pairs(k) do
+            love.graphics.draw(k.sprite, k.position.x, k.position.y, nil, k.scale, k.scale, k.sprite:getWidth() / 2, k.sprite:getHeight() / 2)
         end
     end
 
-     love.graphics.draw(self.hud.hotbar.sprite,self.hud.hotbar.position.x,self.hud.hotbar.position.y)
+    for _, k in pairs(self.popUp) do
+        for z, v in pairs(k) do
+            love.graphics.draw(k.sprite, k.position.x, k.position.y)
+        end
+    end
 
-    print('test')
 end
 
 return gui
