@@ -9,7 +9,8 @@ local player = require('player')
 local inventory = require('inventory')
 local item = require('item')
 local gardenScene = sti('assets/scenes/garden/garden.lua')
-local gui = require('gui')
+
+local ui = require('ui')
 
 function love.load()
 
@@ -48,15 +49,15 @@ end
 function love.keypressed(key)
     
     if key:match('%d') then
-        inventory:changeHotbar(key)
+        inventory.hotbar:changeSelection(key)
     end
 
     if key == 'o' then
-        inventory:load(item.Gear.Weapon[1]) -- Load the first weapon item
+        inventory:load(item.Gear.Tool[1]) -- Load the first weapon item
     end
 
     if key == 'i' then
-        inventory:unload(4,inventory.htb)
+        inventory:unload(inventory.hotbar.selection_index,inventory.hotbar)
     end
 
     if key == 'u' then
@@ -68,7 +69,7 @@ function love.keypressed(key)
     end
 
     if key == 'e' then
-        gui:toggle(gui.menu[1])
+        --.toggle(gui.menu[1]) 
     end
     
 end
@@ -81,5 +82,5 @@ function love.draw()
         gardenScene:drawLayer(gardenScene.layers["Tree"])
         gardenScene:drawLayer(gardenScene.layers["FenceBack"])
     cam:detach()
-    gui:draw()
+    ui:draw(player)
 end

@@ -8,7 +8,7 @@ local util = require('util')
 
 -- GAME OBJECTS
 local item = require('item')
-local inv = require('inventory')
+local inventory = require('inventory')
 
 -- BLURRY PIXEL ART > CLEAN PIXEL ART
 love.graphics.setDefaultFilter('nearest', 'nearest')
@@ -33,8 +33,8 @@ function player:load(world,spawnLocX,spawnLocY)
     -- PLAYER STATE
     self.currentAnimation = self.animations.left
 
-    inv:new()
-
+    -- PLAYER INVENTORY
+    inventory:init(player) -- INITIALIZES INVENTORY
 end
 
 function player:update(dt)
