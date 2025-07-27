@@ -7,7 +7,6 @@ local wf = require('lib.windfield')
 local util = require('util')
 
 -- GAME OBJECTS
-local item = require('item')
 local inventory = require('inventory')
 
 -- BLURRY PIXEL ART > CLEAN PIXEL ART
@@ -34,7 +33,9 @@ function player:load(world,spawnLocX,spawnLocY)
     self.currentAnimation = self.animations.left
 
     -- PLAYER INVENTORY
-    inventory:init(player) -- INITIALIZES INVENTORY
+    inventory:init(player)
+    self.holding = inventory.hotbar.selection
+
 end
 
 function player:update(dt)

@@ -4,9 +4,8 @@ inventory = {
 }
 
 function inventory:init() -- INITIALIZES INVENTORY
-    for i = 1, 27 do self.main[i] = '_' end -- SETS SLOTS FOR INVENTORY
+    for i = 1, 27 do self.main[i] = '_' end    -- SETS SLOTS FOR INVENTORY
     for i = 1, 9 do self.hotbar[i] = '_' end   -- SETS SLOTS FOR HOTBAR
-
 
     self.hotbar.selection_index = 1
     self.hotbar.selection = self.hotbar[self.hotbar.selection_index]
