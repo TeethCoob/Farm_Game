@@ -12,7 +12,7 @@ local inventory = require('inventory')
 -- BLURRY PIXEL ART > CLEAN PIXEL ART
 love.graphics.setDefaultFilter('nearest', 'nearest')
 
-function player:load(world,spawnLocX,spawnLocY)
+function player:load(world, spawn_location)
     -- GRAPHICS
     self.spriteSheet = love.graphics.newImage('assets/textures/entities/kernSpriteSheet.png')
     self.grid = anim8.newGrid(64,64,self.spriteSheet:getWidth(),self.spriteSheet:getHeight())
@@ -21,21 +21,20 @@ function player:load(world,spawnLocX,spawnLocY)
     self.animations.left = anim8.newAnimation(self.grid('1-7',2), 0.07)
 
     -- PHYSICS
-    self.collider = world:newBSGRectangleCollider(spawnLocX,spawnLocY,17,23,2)
+    self.collider_size = {X = 17, Y = 2}
+    self.collider = world:newBSGRectangleCollider(spawn_location.X,spawn_location.Y, 17, 23, 2)
     self.collider:setFixedRotation(true)
 
     -- STATISTICS
     self.money = 1000
-    self.position = {X = 523,Y = 466}
+    self.position = {X = spawn_location_X, Y = spawn_location_Y}
     self.walkSpeed = 4400
 
     -- PLAYER STATE
     self.currentAnimation = self.animations.left
 
     -- PLAYER INVENTORY
-    inventory:init(player)
-    self.holding = inventory.hotbar.selection
-
+    inventory:init(self) -- PLAYER HOTBAR SELECTION IS ON INVENTORY.LUA
 end
 
 function player:update(dt)
@@ -83,9 +82,26 @@ function player:move(dt)
     
 end
 
--- DRAWS PLAYER'S SPRITE
 function player:draw()
-    self.currentAnimation:draw(self.spriteSheet, self.position.X, self.position.Y, nil, 0.6, nil, 32, 32)
+    local character = self.currentAnimation:draw(self.spriteSheet, self.position.X, self.position.Y, nil, 0.6, nil, 32, 32)
+    
+    local item_position = {X = self.position.X + 10, Y = self.position.Y + 17}
+    local item_scale = {X = 0.7, Y = 0.7}
+    local item_orientation
+
+    if self.currentAnimation == self.animations.left then
+        item_position.X = self.position.X - 10
+        item_scale.X = 0.7
+        item_orientation = 85
+    elseif self.currentAnimation == self.animations.right then
+        item_position.X = self.position.X + 10
+        item_scale.X = -0.7
+        item_orientation = -85
+    end
+
+    if self.holding.texture then
+        local item = love.graphics.draw(self.holding.texture, item_position.X, item_position.Y, item_orientation, item_scale.X, item_scale.Y, self.holding.texture:getWidth()/2, self.holding.texture:getHeight()/2)
+    end
 end
 
 return player

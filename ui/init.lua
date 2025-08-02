@@ -1,4 +1,4 @@
-ui = {}
+local ui = {}
 
 ui.hud = require('ui.hud')
 ui.menu = require('ui.menu')
@@ -9,6 +9,6 @@ function ui:draw()
 
     self.hud:draw(scale)
     self.menu:draw(scale)
-end 
+end
 
 return ui

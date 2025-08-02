@@ -11,7 +11,9 @@ return {
   tileheight = 32,
   nextlayerid = 10,
   nextobjectid = 56,
-  properties = {},
+  properties = {
+    spawn_location = {X = 500, Y = 500}
+  },
   tilesets = {
     {
       name = "Terrain",

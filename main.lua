@@ -10,7 +10,10 @@ local inventory = require('inventory')
 local item = require('item')
 local gardenScene = sti('assets/scenes/garden/garden.lua')
 
+-- USER INTERFACE
 local ui = require('ui')
+local hud = ui.hud
+local menu = ui.menu
 
 function love.load()
 
@@ -29,8 +32,10 @@ function love.load()
         end
     end
 
+    local position = {X = 20, Y = 30}
+
     -- LOADS PLAYER
-    player:load(world,533,463)
+    player:load(world, gardenScene.properties.spawn_location)
 
 end
 
@@ -40,13 +45,31 @@ function love.update(deltaTime)
     cam:lookAt(player.position.X,player.position.Y + 7)
 end
 
-function love.wheelmoved(x,y)
-    if y > 0 then
-        
-    end
+local keybinds = {
+    ["Keyboard"] = {
+        ["Menu"] = {
+            ["Settings"   ]  = "escape";
+            ["Inventory"  ]  = "e"     ;
+            ["Achievement"]  = "l"
+        },
+        ["Debugging"] = {
+            ["inventory:debug()"] = "b" ;
+        }
+    },
+    ["Mouse"]    = {
+
+    }
+}
+
+function love.mousepressed()
+    local 
 end
 
-function love.keypressed(key)
+function love.keypressed(pressed_key)
+
+    for _, types in ipairs(keybinds) do
+        
+    end
     
     if key:match('%d') then
         inventory.hotbar:changeSelection(key)
@@ -64,14 +87,21 @@ function love.keypressed(key)
         inventory:move(3, 'htb')
     end
 
+    if key == 'e' then
+        menu:toggle("INVENTORY")
+    end
+
     if key == 'b' then
         inventory:debug()
     end
 
-    if key == 'e' then
-        --.toggle(gui.menu[1]) 
+    if key == 'q' then
+        for o, row in ipairs(inventory.main) do
+            for i, column in ipairs(row) do
+                inventory.main[o][i] = ' '
+            end
+        end
     end
-    
 end
 
 function love.draw()
