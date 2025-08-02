@@ -6,6 +6,8 @@ function menu:toggle(element_str)
     element_str = string.lower(element_str)
 
     self[element_str].visible = not self[element_str].visible
+
+    print(element_str)
 end
 
 function menu:draw(scale)

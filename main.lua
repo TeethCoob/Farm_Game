@@ -46,61 +46,41 @@ function love.update(deltaTime)
 end
 
 local keybinds = {
-    ["Keyboard"] = {
-        ["Menu"] = {
-            ["Settings"   ]  = "escape";
-            ["Inventory"  ]  = "e"     ;
-            ["Achievement"]  = "l"
+    Keyboard = {
+        Menu = {
+            Settings    = "escape",
+            Inventory   = "e",
+            Achievement = "l"
         },
-        ["Debugging"] = {
-            ["inventory:debug()"] = "b" ;
-        }
     },
-    ["Mouse"]    = {
-
+    Mouse = {
+        -- Empty for now
     }
 }
 
 function love.mousepressed()
-    local 
+    
 end
 
 function love.keypressed(pressed_key)
 
-    for _, types in ipairs(keybinds) do
-        
-    end
-    
-    if key:match('%d') then
-        inventory.hotbar:changeSelection(key)
-    end
-
-    if key == 'o' then
-        inventory:load(item.Gear.Tool[1]) -- Load the first weapon item
-    end
-
-    if key == 'i' then
-        inventory:unload(inventory.hotbar.selection_index,inventory.hotbar)
-    end
-
-    if key == 'u' then
-        inventory:move(3, 'htb')
-    end
-
-    if key == 'e' then
-        menu:toggle("INVENTORY")
-    end
-
-    if key == 'b' then
-        inventory:debug()
-    end
-
-    if key == 'q' then
-        for o, row in ipairs(inventory.main) do
-            for i, column in ipairs(row) do
-                inventory.main[o][i] = ' '
+    for type, bindings in pairs(keybinds.Keyboard) do
+        if type == "Menu" then
+            for action, key in pairs(bindings) do
+                if pressed_key == key then
+                    print('angin akan')
+                end
             end
         end
+    end
+
+    -- DEBUG
+    if pressed_key == 'o' then
+        inventory:load(item.Gear.Tool[1])
+    end
+
+    if pressed_key == 'q' then
+        inventory:unload(player.holding)
     end
 end
 
