@@ -16,7 +16,6 @@ local hud = ui.hud
 local menu = ui.menu
 
 function love.load()
-
     -- SETUP CAMERA
     cam = camera()
     cam.scale = 3
@@ -36,7 +35,6 @@ function love.load()
 
     -- LOADS PLAYER
     player:load(world, gardenScene.properties.spawn_location)
-
 end
 
 function love.update(deltaTime)
@@ -60,13 +58,7 @@ local keybinds = {
 }
 
 function love.mousepressed(x, y, button, istouch)
-    if button == 1 then
-        gardenScene.layers["Ground"].data[1][1] = gardenScene.tiles[2]
 
-        gardenScene.layers["Ground"].dirty = true
-        
-        print("Wifi")
-    end
 end
 
 function love.keypressed(pressed_key)

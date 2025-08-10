@@ -1,4 +1,4 @@
-player = {}
+local player = {}
 
 -- LIBRARIES
 local anim8 = require('lib.anim8')
@@ -6,15 +6,14 @@ local camera = require('lib.camera')
 local wf = require('lib.windfield')
 local util = require('util')
 
+local loadTexture = util.loadTexture
+
 -- GAME OBJECTS
 local inventory = require('inventory')
 
--- BLURRY PIXEL ART > CLEAN PIXEL ART
-love.graphics.setDefaultFilter('nearest', 'nearest')
-
 function player:load(world, spawn_location)
     -- GRAPHICS
-    self.spriteSheet = love.graphics.newImage('assets/textures/entities/kernSpriteSheet.png')
+    self.spriteSheet = loadTexture('assets/textures/entities/kernSpriteSheet.png')
     self.grid = anim8.newGrid(64,64,self.spriteSheet:getWidth(),self.spriteSheet:getHeight())
     self.animations = {}
     self.animations.right = anim8.newAnimation(self.grid('1-7',1), 0.07)
@@ -100,7 +99,7 @@ function player:draw()
     end
 
     if self.holding.texture then
-        local item = love.graphics.draw(self.holding.texture, item_position.X, item_position.Y, item_orientation, item_scale.X, item_scale.Y, self.holding.texture:getWidth()/2, self.holding.texture:getHeight()/2)
+        love.graphics.draw(self.holding.texture, item_position.X, item_position.Y, item_orientation, item_scale.X, item_scale.Y, self.holding.texture:getWidth()/2, self.holding.texture:getHeight()/2)
     end
 end
 
