@@ -27,7 +27,7 @@ function player:load(world, spawn_location)
 
     -- STATISTICS
     self.money = 1000
-    self.position = {X = spawn_location_X, Y = spawn_location_Y}
+    self.position = {X = spawn_location.X, Y = spawn_location.Y}
     self.walkSpeed = 4400
 
     -- PLAYER STATE

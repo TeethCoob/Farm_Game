@@ -8,35 +8,70 @@ inventoryUI.visible = false
 inventoryUI.offset = {X = inventoryUI.sprite:getWidth()/2, Y = inventoryUI.sprite:getHeight()/2}
 
 inventoryUI.grid = {}
-inventoryUI.grid.offset = 55
+inventoryUI.grid.offset = -60
 inventoryUI.grid.padding = 115
 
 inventoryUI.sprite:setFilter('nearest', 'nearest') -- SETS IMAGE FROM BLURRY TO PIXELATED
 
 local inventory = require('inventory')
+local test_sprite_item = love.graphics.newImage('assets/textures/gears/SHOE.png')
+
+-- Configurable relative values (percentages)
+local SLOT_SCALE_PERCENT = 0.05   -- slot size relative to screen height
+local PADDING_PERCENT = 0.01      -- padding between slots (relative to screen width)
+local GRID_OFFSET_X_PERCENT = 0.02
+local GRID_OFFSET_Y_PERCENT = 0.02
 
 function inventoryUI:draw(scale)
-    self.position = {X = love.graphics.getWidth()/2, Y = love.graphics.getHeight()/2}
+    local screenW, screenH = love.graphics.getDimensions()
+    self.position = {X = screenW / 2, Y = screenH / 2}
 
-    scale = scale * 4
+    -- Scale sprite relative to screen height
+    local baseScale = (screenH * SLOT_SCALE_PERCENT) / self.sprite:getHeight()
+    scale = scale or baseScale
 
-    if self.visible == true then
-        local menu = love.graphics.draw(self.sprite, self.position.X, self.position.Y, nil, scale, scale, self.offset.X, self.offset.Y)
+    if self.visible then
+        -- Draw inventory background centered
+        love.graphics.draw(
+            self.sprite,
+            self.position.X,
+            self.position.Y,
+            nil,
+            scale,
+            scale,
+            self.offset.X,
+            self.offset.Y
+        )
 
-        local item_position = {X = self.position.X - self.offset.X * 2.8, Y = self.position.Y - 8}
+        -- Calculate grid starting position
+        local startX = self.position.X - (self.sprite:getWidth() * scale / 2) + (screenW * GRID_OFFSET_X_PERCENT)
+        local startY = self.position.Y - (self.sprite:getHeight() * scale / 2) + (screenH * GRID_OFFSET_Y_PERCENT)
 
-        for indexRow, mainRow in ipairs(inventory.main) do
-            for indexColumn, item in ipairs(mainRow) do
-                indexColumn = indexColumn - 1
+        -- Slot size & padding
+        local slotSize = screenH * SLOT_SCALE_PERCENT
+        local padding = screenW * PADDING_PERCENT
 
-                local columnPosition = item_position.X + (self.grid.offset + (self.grid.padding * indexColumn))
+        -- Draw items
+        for rowIndex, mainRow in ipairs(inventory.main) do
+            for colIndex, item in ipairs(mainRow) do
+                local columnPosition = startX + (colIndex - 1) * (slotSize + padding)
+                local rowPosition = startY + (rowIndex - 1) * (slotSize + padding)
 
                 if item and item.texture then
-                    local image = love.graphics.draw(item.texture, columnPosition, item_position.Y, nil, scale, scale, nil, self.test_sprite:getHeight()/2)
+                    item.texture:setFilter('nearest', 'nearest')
+                    love.graphics.draw(
+                        item.texture,
+                        columnPosition,
+                        rowPosition,
+                        nil,
+                        slotSize / item.texture:getWidth(), -- dynamic scaling to fit slot
+                        slotSize / item.texture:getHeight()
+                    )
                 end
             end
         end
     end
 end
+
 
 return inventoryUI

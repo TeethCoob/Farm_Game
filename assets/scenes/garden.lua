@@ -12,7 +12,7 @@ return {
   nextlayerid = 10,
   nextobjectid = 56,
   properties = {
-    spawn_location = {X = 500, Y = 500}
+    spawn_location = {X = 500, Y = 500},
   },
   tilesets = {
     {
@@ -24,7 +24,7 @@ return {
       spacing = 0,
       margin = 0,
       columns = 8,
-      image = "../../textures/Tileset.png",
+      image = "../textures/Tileset.png",
       imagewidth = 256,
       imageheight = 64,
       objectalignment = "unspecified",

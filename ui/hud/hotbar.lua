@@ -51,7 +51,7 @@ function hotbarUI:draw(scale)
             local itemX = drawX + (self.grid.slotMargin * scale - textureW) / 2
             local itemY = drawY + (self.grid.slotMargin * scale - textureH) / 2
 
-            love.graphics.draw(item.texture, itemX, itemY, nil, item_scale, item_scale)
+            local image = love.graphics.draw(item.texture, itemX, itemY, nil, item_scale, item_scale)
         end
     end
 end

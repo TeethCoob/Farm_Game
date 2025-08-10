@@ -8,7 +8,7 @@ local camera = require('lib.camera')
 local player = require('player')
 local inventory = require('inventory')
 local item = require('item')
-local gardenScene = sti('assets/scenes/garden/garden.lua')
+local gardenScene = sti('assets/scenes/garden.lua')
 
 -- USER INTERFACE
 local ui = require('ui')
@@ -42,6 +42,7 @@ end
 function love.update(deltaTime)
     world:update(deltaTime)
     player:update(deltaTime)
+    gardenScene:update(deltaTime)
     cam:lookAt(player.position.X,player.position.Y + 7)
 end
 
@@ -58,8 +59,14 @@ local keybinds = {
     }
 }
 
-function love.mousepressed()
-    
+function love.mousepressed(x, y, button, istouch)
+    if button == 1 then
+        gardenScene.layers["Ground"].data[1][1] = gardenScene.tiles[2]
+
+        gardenScene.layers["Ground"].dirty = true
+        
+        print("Wifi")
+    end
 end
 
 function love.keypressed(pressed_key)
@@ -68,7 +75,7 @@ function love.keypressed(pressed_key)
         if type == "Menu" then
             for action, key in pairs(bindings) do
                 if pressed_key == key then
-                    print('angin akan')
+                    menu:toggle(action)
                 end
             end
         end
@@ -78,9 +85,13 @@ function love.keypressed(pressed_key)
     if pressed_key == 'o' then
         inventory:load(item.Gear.Tool[1])
     end
+    
+    if pressed_key:match("%d") then
+        inventory.hotbar:changeSelection(pressed_key)
+    end
 
     if pressed_key == 'q' then
-        inventory:unload(player.holding)
+        inventory:unload(inventory.hotbar.selection_index, inventory.hotbar)
     end
 end
 
@@ -92,5 +103,5 @@ function love.draw()
         gardenScene:drawLayer(gardenScene.layers["Tree"])
         gardenScene:drawLayer(gardenScene.layers["FenceBack"])
     cam:detach()
-    ui:draw(player)
+    ui:draw()
 end

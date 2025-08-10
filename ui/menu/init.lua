@@ -1,6 +1,7 @@
 menu = {}
 
 menu.inventory = require('ui.menu.inventory')
+menu.settings = require('ui.menu.settings')
 
 function menu:toggle(element_str)
     element_str = string.lower(element_str)

@@ -4,7 +4,7 @@
   <export target="garden.lua" format="lua"/>
  </editorsettings>
  <tileset firstgid="1" name="Terrain" tilewidth="32" tileheight="32" tilecount="16" columns="8">
-  <image source="../../textures/Tileset.png" width="256" height="64"/>
+  <image source="../textures/Tileset.png" width="256" height="64"/>
  </tileset>
  <layer id="3" name="Ground" width="30" height="30">
   <data encoding="csv">
