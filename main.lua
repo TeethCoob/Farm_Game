@@ -7,13 +7,15 @@ local camera = require('lib.camera')
 -- GAME OBJECTS
 local player = require('player')
 local inventory = require('inventory')
-local item = require('item')
+local itemDB = require('data.itemDB')
 local gardenScene = sti('assets/scenes/garden.lua')
 
 -- USER INTERFACE
 local ui = require('ui')
 local hud = ui.hud
 local menu = ui.menu
+
+local tileSize = 32 -- make sure this matches your Tiled map's tile size
 
 function love.load()
     -- SETUP CAMERA
@@ -57,12 +59,26 @@ local keybinds = {
     }
 }
 
-function love.mousepressed(x, y, button, istouch)
+local tilex = 0
+local tiley = 0
 
+function love.mousepressed(x, y, button, istouch)
+    local worldX, worldY = cam:worldCoords(x, y)
+
+    local tileX = math.floor(worldX / tileSize) + 1
+    local tileY = math.floor(worldY / tileSize) + 1
+
+    if player.holding.type == "Hoe" then
+        if gardenScene.layers['Ground'].data[tileX][tileY].gid == 1 then
+            gardenScene:setLayerTile("Ground", tileX, tileY, 2)
+        else
+            print('aa')
+            gardenScene:setLayerTile("Ground", tileX, tileY, 1)
+        end
+    end
 end
 
 function love.keypressed(pressed_key)
-
     for type, bindings in pairs(keybinds.Keyboard) do
         if type == "Menu" then
             for action, key in pairs(bindings) do
@@ -75,7 +91,7 @@ function love.keypressed(pressed_key)
 
     -- DEBUG
     if pressed_key == 'o' then
-        inventory:load(item.Gear.Tool[1])
+        inventory:load(itemDB.tools[1])
     end
     
     if pressed_key:match("%d") then
@@ -85,6 +101,10 @@ function love.keypressed(pressed_key)
     if pressed_key == 'q' then
         inventory:unload(inventory.hotbar.selection_index, inventory.hotbar)
     end
+
+--[[    if pressed_key == 't' then
+        gardenScene:setLayerTile("Ground", 1, 1, 2)
+    end]]
 end
 
 function love.draw()
@@ -94,6 +114,7 @@ function love.draw()
         player:draw()
         gardenScene:drawLayer(gardenScene.layers["Tree"])
         gardenScene:drawLayer(gardenScene.layers["FenceBack"])
+        love.graphics.rectangle("line", tilex, tiley, 5, 5)
     cam:detach()
     ui:draw()
 end

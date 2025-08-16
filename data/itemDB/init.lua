@@ -1,0 +1,18 @@
+local itemDB = {}
+
+local util = require('util')
+
+local loadTexture = util.loadTexture
+
+itemDB.tools = require('data.itemDB.tools')
+
+local container = {itemDB.tools}
+
+for _, categoryChild in ipairs(container) do
+    for _, item in ipairs(categoryChild) do
+        local texture = loadTexture(item.texture)
+        item.texture = texture
+    end
+end
+
+return itemDB
