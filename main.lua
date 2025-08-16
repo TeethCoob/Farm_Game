@@ -3,6 +3,10 @@ local sti = require('lib.sti')
 local windfield = require('lib.windfield')
 local anim8 = require('lib.anim8')
 local camera = require('lib.camera')
+local util = require('util')
+
+-- UTILITY
+local loadTexture = util.loadTexture
 
 -- GAME OBJECTS
 local player = require('player')
@@ -15,7 +19,15 @@ local ui = require('ui')
 local hud = ui.hud
 local menu = ui.menu
 
-local tileSize = 32 -- make sure this matches your Tiled map's tile size
+local tile_highlight = loadTexture("assets/textures/tile_highlight.png")
+local tile_highlight_position = {
+    X = nil,
+    Y = nil
+}
+
+local camOffset = 7
+
+local tileSize = 32
 
 function love.load()
     -- SETUP CAMERA
@@ -33,8 +45,6 @@ function love.load()
         end
     end
 
-    local position = {X = 20, Y = 30}
-
     -- LOADS PLAYER
     player:load(world, gardenScene.properties.spawn_location)
 end
@@ -43,7 +53,24 @@ function love.update(deltaTime)
     world:update(deltaTime)
     player:update(deltaTime)
     gardenScene:update(deltaTime)
-    cam:lookAt(player.position.X,player.position.Y + 7)
+    cam:lookAt(player.position.X, player.position.Y + camOffset)
+
+    mouse_positionX, mouse_positionY = love.mouse.getPosition()
+
+    worldX, worldY = cam:worldCoords(mouse_positionX, mouse_positionY)
+end
+
+local function getTileGID(map, layerName, tx, ty)
+    local layer = map.layers[layerName]
+    if not layer or layer.type ~= "tilelayer" then
+        return nil
+    end
+
+    local tile = layer.data[ty] and layer.data[ty][tx]
+    if tile then
+        return tile.gid
+    end
+    return nil
 end
 
 local keybinds = {
@@ -53,26 +80,26 @@ local keybinds = {
             Inventory   = "e",
             Achievement = "l"
         },
+        Action = {
+            Jump = "Space"
+        }
     },
     Mouse = {
         -- Empty for now
     }
 }
 
-local tilex = 0
-local tiley = 0
-
 function love.mousepressed(x, y, button, istouch)
-    local worldX, worldY = cam:worldCoords(x, y)
 
     local tileX = math.floor(worldX / tileSize) + 1
     local tileY = math.floor(worldY / tileSize) + 1
 
     if player.holding.type == "Hoe" then
-        if gardenScene.layers['Ground'].data[tileX][tileY].gid == 1 then
-            gardenScene:setLayerTile("Ground", tileX, tileY, 2)
-        else
-            print('aa')
+        local gid = getTileGID(gardenScene, "Ground", tileX, tileY)
+      
+        if gid == 1 then
+           gardenScene:setLayerTile("Ground", tileX, tileY, 2)
+        elseif gid == 2 then
             gardenScene:setLayerTile("Ground", tileX, tileY, 1)
         end
     end
@@ -91,7 +118,7 @@ function love.keypressed(pressed_key)
 
     -- DEBUG
     if pressed_key == 'o' then
-        inventory:load(itemDB.tools[1])
+        inventory:load(itemDB.tools[1]) -- Hoe
     end
     
     if pressed_key:match("%d") then
@@ -101,10 +128,6 @@ function love.keypressed(pressed_key)
     if pressed_key == 'q' then
         inventory:unload(inventory.hotbar.selection_index, inventory.hotbar)
     end
-
---[[    if pressed_key == 't' then
-        gardenScene:setLayerTile("Ground", 1, 1, 2)
-    end]]
 end
 
 function love.draw()
@@ -114,7 +137,23 @@ function love.draw()
         player:draw()
         gardenScene:drawLayer(gardenScene.layers["Tree"])
         gardenScene:drawLayer(gardenScene.layers["FenceBack"])
-        love.graphics.rectangle("line", tilex, tiley, 5, 5)
     cam:detach()
+    
+    local tileX = math.floor(mouse_positionX / tileSize)
+    local tileY = math.floor(mouse_positionY / tileSize)
+
+    local worldX = tileX * tileSize
+    local worldY = tileY * tileSize
+
+    love.graphics.draw(
+        tile_highlight,
+        tileX,
+        tileY,
+        nil,
+        2,
+        2,
+        tile_highlight:getWidth()/2,
+        tile_highlight:getHeight()/2
+    )
     ui:draw()
 end
