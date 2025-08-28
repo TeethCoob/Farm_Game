@@ -1,3 +1,5 @@
+io.stdout:setvbuf('no')
+
 function love.conf(t)
     t.title = "Mango Farm"
     t.version = "11.4"

@@ -10,7 +10,7 @@ local DEFAULT_INDEX = -1
 
 -- PROPERTIES
 inventoryUI.sprite = loadTexture('assets/textures/ui/menu/inventory.png')
-inventoryUI.visible = true
+inventoryUI.visible = false
 inventoryUI.position = {}
 inventoryUI.scale = 6
 inventoryUI.scale_offset = {

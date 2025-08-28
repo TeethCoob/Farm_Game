@@ -8,7 +8,7 @@ function menu:toggle(element_str)
 
     self[element_str].visible = not self[element_str].visible
 
-    print(element_str)
+    -- print(element_str)
 end
 
 function menu:draw(scale)

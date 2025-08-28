@@ -12,8 +12,6 @@ local empty = ' '
 
 local player
 
-local item = require('item')
-
 function inventory:init(client) -- INITIALIZES INVENTORY
     for i = 1, self.main.row do self.main[i] = {} for k = 1, self.main.column do self.main[i][k] = empty end end -- SETS SLOTS FOR MAIN
     for i = 1, 9 do self.hotbar[i] = empty end                                        -- SETS SLOTS FOR HOTBAR

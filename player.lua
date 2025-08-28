@@ -3,7 +3,6 @@ local player = {}
 -- LIBRARIES
 local anim8 = require('lib.anim8')
 local camera = require('lib.camera')
-local wf = require('lib.windfield')
 local util = require('util')
 
 local loadTexture = util.loadTexture
