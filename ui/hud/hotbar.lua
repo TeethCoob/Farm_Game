@@ -82,8 +82,8 @@ function hotbarUI:draw()
         end
     end
     
-    local hotbar_selection_index = hotbar.selection_index - 1
-    local selection_outline_row_position = self.grid.origin_position.X + self.grid.gap * hotbar_selection_index
+    local hotbarSelectionIndex = hotbar.selectionIndex - 1
+    local selection_outline_row_position = self.grid.origin_position.X + self.grid.gap * hotbarSelectionIndex
 
     local selection_outline = love.graphics.draw(
         self.selection_outline_sprite,

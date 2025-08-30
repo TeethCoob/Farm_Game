@@ -11,6 +11,11 @@ local loadTexture = util.loadTexture
 local inventory = require('inventory')
 
 function player:load(world, spawn_location)
+    -- STATISTICS
+    self.money = 1000
+    self.position = {X = spawn_location.X, Y = spawn_location.Y}
+    self.walkSpeed = 4400
+
     -- GRAPHICS
     self.spriteSheet = loadTexture('assets/textures/entities/kernSpriteSheet.png')
     self.grid = anim8.newGrid(64,64,self.spriteSheet:getWidth(),self.spriteSheet:getHeight())
@@ -20,13 +25,8 @@ function player:load(world, spawn_location)
 
     -- PHYSICS
     self.collider_size = {X = 17, Y = 2}
-    self.collider = world:newBSGRectangleCollider(spawn_location.X,spawn_location.Y, 17, 23, 2)
+    self.collider = world:newCollider("Rectangle", {spawn_location.X,spawn_location.Y, 17, 23})
     self.collider:setFixedRotation(true)
-
-    -- STATISTICS
-    self.money = 1000
-    self.position = {X = spawn_location.X, Y = spawn_location.Y}
-    self.walkSpeed = 4400
 
     -- PLAYER STATE
     self.currentAnimation = self.animations.left
@@ -49,7 +49,6 @@ function player:move(dt)
     local velocityX = 0
     local velocityY = 0
 
-    -- CONTROL
     if love.keyboard.isDown("up", 'w') then
         velocityY = self.walkSpeed * -1 * dt
         idle = false
@@ -69,15 +68,14 @@ function player:move(dt)
     -- MOVES PLAYER COLLIDER
     self.collider:setLinearVelocity(velocityX,velocityY)
 
-    -- IDLE ANIMATION
     if idle == true then
         self.currentAnimation:gotoFrame(1)
     end
 
     -- MAKES THE PLAYER SPRITE MOVE AS LONG WITH PLAYER'S COLLIDER
     self.position.X = self.collider:getX() - 1
-    self.position.Y = self.collider:getY() - 7 
-    
+    self.position.Y = self.collider:getY() - 7
+
 end
 
 function player:draw()

@@ -41,7 +41,7 @@ local function getTileGID(map, layerName, tx, ty)
     return nil
 end
 
-function controller:mouse_mapping(x, y, button)
+function controller:mouseMapping(x, y, button)
     local leftClick = 1
 
     local tileX = math.floor(worldX / tileSize) + 1
@@ -55,8 +55,6 @@ function controller:mouse_mapping(x, y, button)
 
     local cornGID = 11
     local nothingGID = 16
-
-    local plants_layer = currentScene.layers["Plants"]
 
     if button == leftClick then
         if player.holding.type == "hoe" then
@@ -81,11 +79,11 @@ function controller:mouse_mapping(x, y, button)
     end
 end
 
-function controller:key_mapping(pressed_key)
+function controller:keyMapping(pressedKey)
     for type, bindings in pairs(keybinds.Keyboard) do
         if type == "Menu" then
             for action, key in pairs(bindings) do
-                if pressed_key == key then
+                if pressedKey == key then
                     menu:toggle(action)
                 end
             end
@@ -93,24 +91,24 @@ function controller:key_mapping(pressed_key)
     end
 
     --------------------- DEBUG ---------------------
-    if pressed_key == 'b' then
+    if pressedKey == 'b' then
         gameManager:changeScene("Stone")
     end
 
-    if pressed_key == 'o' then
+    if pressedKey == 'o' then
         inventory:load(itemDB.tools[1]) -- Hoe
     end
 
-    if pressed_key == 'u' then
+    if pressedKey == 'u' then
         inventory:load(itemDB.seeds[1])
     end
 
-    if pressed_key:match("%d") then
-        inventory.hotbar:changeSelection(pressed_key)
+    if pressedKey:match("%d") then
+        inventory.hotbar:changeSelection(pressedKey)
     end
 
-    if pressed_key == 'q' then
-        inventory:unload(inventory.hotbar.selection_index, inventory.hotbar)
+    if pressedKey == 'q' then
+        inventory:unload(inventory.hotbar.selectionIndex, inventory.hotbar)
     end
     -------------------------------------------------
 end

@@ -1,4 +1,3 @@
--- MODULES
 local controller = require('controller')
 local gameManager = require('gameManager')
 
@@ -11,15 +10,13 @@ function love.update(deltaTime)
 end
 
 function love.mousepressed(x, y, button)
-    controller:mouse_mapping(x, y, button)
+    controller:mouseMapping(x, y, button)
 end
 
-function love.keypressed(pressed_key)
-    controller:key_mapping(pressed_key)
+function love.keypressed(pressedKey)
+    controller:keyMapping(pressedKey)
 end
 
 function love.draw()
     gameManager:draw()
 end
-
-print("aing moto teu")

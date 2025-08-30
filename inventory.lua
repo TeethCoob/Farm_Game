@@ -17,16 +17,16 @@ function inventory:init(client) -- INITIALIZES INVENTORY
     for i = 1, 9 do self.hotbar[i] = empty end                                        -- SETS SLOTS FOR HOTBAR
 
     player = client
-    self.hotbar.selection_index = 1
-    player.holding = self.hotbar[self.hotbar.selection_index]
+    self.hotbar.selectionIndex = 1
+    player.holding = self.hotbar[self.hotbar.selectionIndex]
 end
 
 function inventory.hotbar:changeSelection(key)
     local numPressedKey = tonumber(key)
 
     if numPressedKey and numPressedKey >= 1 and numPressedKey <= 9 then
-        self.selection_index = numPressedKey
-        player.holding = self[self.selection_index]
+        self.selectionIndex = numPressedKey
+        player.holding = self[self.selectionIndex]
 
         if player.holding.name then
             print('You are holding: ' .. player.holding.name)
@@ -90,7 +90,7 @@ function inventory:load(item)
     if hotbarEmptySlots > 0 then
         self.hotbar[hotbarIndex] = item
 
-        if self.hotbar.selection_index == hotbarIndex then
+        if self.hotbar.selectionIndex == hotbarIndex then
             player.holding = self.hotbar[hotbarIndex]
         end
 
@@ -133,13 +133,13 @@ function inventory:debug()
     print('Items in inventory:')
 
     for _, row in ipairs(self.main) do
-        local main_items = {}
+        local mainItems = {}
 
         for _, item in ipairs(row) do
-            table.insert(main_items, item.name or item)
+            table.insert(mainItems, item.name or item)
         end
 
-        print(table.concat(main_items, ' | '))
+        print(table.concat(mainItems, ' | '))
     end
 
     for i = 1, 3 do
@@ -148,13 +148,13 @@ function inventory:debug()
 
     print('Items in hotbar:')
 
-    local hotbar_items = {}
-    
+    local hotbarItems = {}
+
     for _, item in ipairs(self.hotbar) do
-        table.insert(hotbar_items, item.name or item)
+        table.insert(hotbarItems, item.name or item)
     end
 
-    print(table.concat(hotbar_items, ' | '))
+    print(table.concat(hotbarItems, ' | '))
 end
 
 return inventory

@@ -10,15 +10,15 @@ local player = require('player')
 local sceneManager = scenes.manager
 
 -- CAMERA SETTINGS
-local cam_scale = 3
-local cam_offset = {
+local CamScale = 3
+local CamOffset = {
     X = 0,
     Y = 7
 }
 
 function gameManager:load()
     cam = camera()
-    cam.scale = cam_scale
+    cam.scale = CamScale
 
     world = breezefield.newWorld(0, 0)
 
@@ -44,46 +44,53 @@ function gameManager:update(deltaTime)
     currentScene:update(deltaTime)
 
     -- Camera follows player
-    local cam_origin_position = {X = player.position.X, Y = player.position.Y}
-    cam:lookAt(cam_origin_position.X, cam_origin_position.Y + cam_offset.Y)
+    local camOriginPosition = {X = player.position.X, Y = player.position.Y}
+    cam:lookAt(camOriginPosition.X, camOriginPosition.Y + camOffset.Y)
 
-    mouse_positionX, mouse_positionY = cam:mousePosition()
-    love_mouse_positionX, love_mouse_positionY = love.mouse.getPosition()
-    worldX, worldY = cam:worldCoords(love_mouse_positionX, love_mouse_positionY)
+    mousePositionX, mousePositionY = cam:mousePosition()
+    loveMousePositionX, loveMousePositionY = love.mouse.getPosition()
+    worldX, worldY = cam:worldCoords(loveMousePositionX, loveMousePositionY)
 end
+
+local function drawOutlineSelection(x, y)
+    local outlineSize = 32
+
+    if player.holding.type == "hoe" or player.holding.type == "seed" then
+        love.graphics.rectangle("line", x, y, outlineSize, outlineSize)
+    end
+end
+
 
 function gameManager:draw()
     local currentScene = sceneManager.currentScene
 
     cam:attach()
-        local tileX = math.floor(mouse_positionX / mapTileSize)
-        local tileY = math.floor(mouse_positionY / mapTileSize)
+        local tileX = math.floor(mousePositionX / mapTileSize)
+        local tileY = math.floor(mousePositionY / mapTileSize)
 
         local worldX = tileX * mapTileSize
         local worldY = tileY * mapTileSize
 
         currentScene:drawLayer(currentScene.layers["Ground"])
-        -- currentScene:drawLayer(currentScene.layers["Plants"])
-        -- currentScene:drawLayer(currentScene.layers["FenceFront"])
-        if player.holding.type == "hoe" or player.holding.type == "seed" then
-            love.graphics.rectangle("line", worldX, worldY, 32, 32)
-        end
+        currentScene:drawLayer(currentScene.layers["Plants"])
+        currentScene:drawLayer(currentScene.layers["FenceFront"])
+        drawOutlineSelection(worldX, worldY)
         player:draw()
-        -- currentScene:drawLayer(currentScene.layers["Tree"])
-        -- currentScene:drawLayer(currentScene.layers["FenceBack"])
+        currentScene:drawLayer(currentScene.layers["Tree"])
+        currentScene:drawLayer(currentScene.layers["FenceBack"])
     cam:detach()
- 
+
     ui:draw()
 end
 
-function gameManager:changeScene(scene_name)
+function gameManager:changeScene(sceneName)
     -- clear world before loading new scene
     for _, body in ipairs(world:getBodies()) do
         body:destroy()
     end
 
     -- load new scene
-    sceneManager:load(scene_name)
+    sceneManager:load(sceneName)
 
     -- reset spawn location
     local currentScene = sceneManager.currentScene
@@ -93,7 +100,7 @@ function gameManager:changeScene(scene_name)
     }
 
     player:load(world, mapSpawnLocation)
-    print("Switched to scene:", scene_name)
+    print("Switched to scene:", sceneName)
 end
 
 
